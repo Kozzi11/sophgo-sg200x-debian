@@ -56,7 +56,7 @@ int cvi_board_init(void)
         mmio_write_32(0x030010E0, 0x0); // CMD
         mmio_write_32(0x030010E4, 0x0); // CLK
 
-        // LED 
+        // LED
         //mmio_write_32(0x03001038, 0x3); // SD0_PWR_EN/XGPIOA_14
         PINMUX_CONFIG(SD0_PWR_EN, XGPIOA_14);
 

@@ -118,7 +118,7 @@ if [ "$STORAGETYPE" = "sd" ]; then
   sed -i -e 's|fdtdir /usr/lib/|fdtdir /fdt/|' /boot/extlinux/extlinux.conf
   sed -i -e 's|linux /boot/|linux /|' /boot/extlinux/extlinux.conf
   sed -i -e "s|U_BOOT_FDT_DIR=\".*\"|U_BOOT_FDT_DIR=\"/fdt/linux-image-$BOARD-\"|" /etc/default/u-boot
-else 
+else
   sed -i -e 's|fdtdir /usr/lib/|fdtdir /boot/fdt/|' /boot/extlinux/extlinux.conf
 fi
 
@@ -127,12 +127,12 @@ cat /boot/extlinux/extlinux.conf
 # Set hostname
 cat /tmp/install/hostname > /etc/hostname
 
-# 
+#
 cat >> /etc/hosts << EOF
-127.0.0.1      ${HOSTNAME} 
+127.0.0.1      ${HOSTNAME}
 EOF
 
-# 
+#
 # Enable system services
 #
 systemctl enable finalize-image.service
@@ -140,15 +140,16 @@ if [ -f /tmp/install/systemd-enable ]; then
   systemctl enable `cat /tmp/install/systemd-enable`
 fi
 
-# Update source list 
+# Update source list
 
 rm -rf /etc/apt/sources.list.d/multistrap-debian.list
 
 apt-key add /tmp/install/public-key.asc
+cat /tmp/install/public-key.asc > /etc/apt/sophgo-public-key.asc
 
 cat > /etc/apt/sources.list <<EOF
 deb http://deb.debian.org/debian sid main non-free-firmware
-deb https://sophgo.my-ho.st:8443/ debian sophgo
+deb [signed-by=/etc/apt/sophgo-public-key.asc] https://sophgo.my-ho.st:8443/ debian sophgo
 EOF
 
 echo "/boot/uboot.env	0x0000          0x20000" > /etc/fw_env.config

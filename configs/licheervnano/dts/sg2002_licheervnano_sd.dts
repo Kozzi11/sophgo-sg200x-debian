@@ -109,7 +109,7 @@
 		        function = LED_FUNCTION_HEARTBEAT;
 	        };
         };
-#ifndef __UBOOT__        
+#ifndef __UBOOT__
         mbox: mbox@0x01900000 {
                 compatible = "cvitek,sg200x-mailbox";
 		reg = <0x0 0x01900000 0x0 0x1000>;
@@ -134,4 +134,3 @@
 	};
 #endif
 };
-
