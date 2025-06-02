@@ -38,7 +38,7 @@ NPROCS := $(shell nproc)
 $(BUILDDIR)/linux-prepare-checkout-stamp:
 	@echo "$(COLOUR_GREEN)Checking out Kernel for $(BOARD)$(END_COLOUR)"
 	@mkdir -p $(BUILDDIR)
-	@git clone -b sg200x-dev --depth 7 https://github.com/sophgo/linux_5.10.git /build/kernel
+	@git clone -b sg200x-dev --depth 3 https://github.com/sophgo/linux_5.10.git /build/kernel
 	@cd $(BUILDDIR)/kernel && git checkout e1b5c29c16ed66dbfcd256a1cc508b9b1f5a13c6
 	@touch $@
 

@@ -25,17 +25,80 @@
 };
 
 
+&i2c2 {
+        status = "disabled";
+        /delete-property/ scl-pinmux;
+        /delete-property/ sda-pinmux;
+        /delete-property/ scl-gpios;
+        /delete-property/ sda-gpios;
+};
+
+&i2c3 {
+        status = "okay";
+        /delete-property/ scl-pinmux;
+        /delete-property/ sda-pinmux;
+        /delete-property/ scl-gpios;
+        /delete-property/ sda-gpios;
+};
+
 &i2c4 {
-        statuc = "okay";
+        status = "okay";
         gt9xx: gt9xx@14 {
-                compatible = "goodix,gt911";
+                compatible = "goodix,gt9xx";
                 reg = <0x14>;
-		interrupts = <3 0 IRQ_TYPE_EDGE_FALLING>;
-		interrupt-parent = <&porte>;
-                irq-gpios= <&porte 3 0>;
-                reset-gpios = <&porte 4 0>;
+                goodix,irq-gpio = <&porte 3 0>;
+                goodix,rst-gpio = <&porte 4 0>;
                 status = "okay";
         };
+        hynitron: hynitron@5a {
+                compatible = "hynitron,hyn_ts", "hyn,7xx";
+                reg = <0x5a>;
+                irq-gpio = <&porte 3 0>;
+                hynitron,irq-gpio = <&porte 3 0>;
+                reset-gpio = <&porte 4 0>;
+                hynitron,reset-gpio = <&porte 4 0>;
+                max-touch-number = <5>;
+                hynitron,max-touch-number = <5>;
+                display-coords = <0 0 480 640>;
+                hynitron,display-coords = <368 552>;
+                pos-swap = <0>;
+                posx-reverse = <1>;
+                posy-reverse = <1>;
+                status = "okay";
+        };
+};
+
+&spi0 {
+	status = "okay";
+};
+
+&spi1 {
+	status = "okay";
+};
+
+&spi2 {
+	status = "okay";
+
+        // /delete-node/ spidev@0;
+        st7789: st7789@0{
+		compatible = "sitronix,st7789";
+		reg = <0>;
+		status = "disabled";
+		spi-max-frequency = <80000000>;
+		spi-cpol;
+		spi-cpha;
+		rotate = <0>;
+		fps = <60>;
+		rgb;
+		buswidth = <8>;
+		dc = <&porte 20 GPIO_ACTIVE_HIGH>;
+		reset = <&porta 14 GPIO_ACTIVE_LOW>;
+		debug = <0>;
+	};
+};
+
+&spi3 {
+	status = "okay";
 };
 
 &dac {
@@ -58,6 +121,29 @@
 
 / {
         model = "LicheeRv Nano";
+
+        spi4: spi4@gpio {
+		compatible = "spi-gpio";
+		sck-gpio = <&porta 22 0>;
+		miso-gpio = <&porta 23 0>;
+		mosi-gpio = <&porta 25 0>;
+		cs-gpio = <&porta 24 GPIO_ACTIVE_LOW>;
+		num-chipselects = <1>;
+		status = "okay";
+
+		spidev@0 {
+			compatible = "spidev";
+			reg = <0>;
+		};
+	};
+
+        i2c5: i2c5@gpio {
+                compatible = "i2c-gpio";
+                scl-gpios = <&porta 15 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
+                sda-gpios = <&porta 27 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
+                i2c-gpio,delay-us = <5>;
+                status = "okay";
+        };
 
 	/delete-node/ wifi_pin;
 	/delete-node/ bt_pin;

@@ -95,6 +95,10 @@ int cvi_board_init(void)
         mmio_write_32(0x05027078, 0x11);// Unlock PWR_GPIO[3]
         mmio_write_32(0x0502707c, 0x11);// Unlock PWR_GPIO[4]
 
+        // bitbang i2c
+        mmio_write_32(0x0300103C, 0x03); // GPIOA 15 GPIO_MODE
+	mmio_write_32(0x03001058, 0x03); // GPIOA 27 GPIO_MODE
+
         // bitbang i2c for maixcam
 #ifdef MAIXCAM
         mmio_write_32(0x0300105C, 0x3);// GPIOA 23 GPIO_MODE
